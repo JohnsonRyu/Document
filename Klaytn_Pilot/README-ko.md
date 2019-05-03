@@ -171,7 +171,7 @@ function checkUserRewardCount() internal {
 }
 ```
    
-첫 번째로 `checkResetRewardCount();`는 User가 받은 보상 횟수의 초기화를 검토한다. UTC+09 기준으로 00시 마다 보상 횟수를 초기화시켜야 했기 때문에 timestamp를 날짜로 변환시켜야 했다. 이를 위해 우리는 DataTime Contract를 사용하였다.    
+첫 번째로 `checkResetRewardCount();`는 User가 받은 보상 횟수의 초기화를 검토한다. UTC+09 기준으로 00시 마다 보상 횟수를 초기화시켜야 했기 때문에 timestamp를 날짜로 변환시켜야 했다. 이를 위해 우리는 DateTime Contract를 사용하였다.    
 - Check out detailed information about DateTime at [github](https://github.com/pipermerriam/ethereum-datetime)
    
 또한, 효율적인 Gas사용을 위하여 User가 마지막으로 기록한 시간 `UserData.lastTimeStamp`를 Day를 변환하고, 현재 TimeStamp를 Day로 변환하여 비교하였다. Day 같다면 Month를 비교하였다. year의 경우 발생할 확률에 비하여 조건검사로 소모되는 Gas비용이 크다고 판단하여 비교하지 않았다.   
