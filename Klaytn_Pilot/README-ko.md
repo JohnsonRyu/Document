@@ -11,7 +11,7 @@
    
 # 2. Systems Architecture
 
-![인포그래픽_1_](uploads/961b6df622b6d6c7f0f03f210cddbf0e/인포그래픽_1_.png)
+![image_1](./images/image_1.png)
 
 ## API Function List
 
@@ -39,7 +39,7 @@ Klaytn API Server에서 생성되는 모든 Transaction의 Sender는 User 자신
 
  해당 파일럿 프로젝트는 총 3가지의 SmartContract를 가지고 있다.  
    
-![인포그래픽_2_](uploads/708cb7e4a2132ef85aba0a2d9f71b566/인포그래픽_2_.png)
+![image_2](./images/image_2.png)
    
 * 글을 작성하고, 기록하는 `Inconvenience` Contract
 * 유저의 보상이 되고, 유저의 지불 수단이 되는 `Social Innovator Token` Contract
