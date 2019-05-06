@@ -11,7 +11,7 @@
    
 # 2. Systems Architecture
 
-![image_1](./images/image_1.png)
+![인포그래픽_1_](uploads/961b6df622b6d6c7f0f03f210cddbf0e/인포그래픽_1_.png)
 
 ## API Function List
 
@@ -28,13 +28,18 @@
 * 이름 변경권 구매  
 * 사용자 이름 변경  
 * 사용자 상태 확인  
-
-
+   
+Klaytn API Server에서 생성되는 모든 Transaction의 Sender는 User 자신이다. 기존 이더리움과 같은 Public Blockchain에서는 Sender가 Transaction Fee를 부담했지만, Klaytn에서는 상황에 따라 Transaction Fee를 대신 납부 할 수 있다. 우리는 Fee Delegated의 주최가 되는 마스터 계정을 만들고, 그곳에 충분한 Klay를 예치 한 후 User들의 Transaction Fee를 대신 납부 하게 제작하였다.   
+   
+- [Enterprise Proxy](https://docs.klaytn.com/klaytn/enterprise_proxy#necessity-of-enterprise-proxy)
+- [Klaytn Send Transaction Fee Delegated](https://docs.klaytn.com/api/toolkit/caverjs/caver.klay#sendtransaction-value_transfer)
+   
+   
 # 3. SmartContract Code OverView
 
  해당 파일럿 프로젝트는 총 3가지의 SmartContract를 가지고 있다.  
    
-![image_2](./images/image_2.png)
+![인포그래픽_2_](uploads/708cb7e4a2132ef85aba0a2d9f71b566/인포그래픽_2_.png)
    
 * 글을 작성하고, 기록하는 `Inconvenience` Contract
 * 유저의 보상이 되고, 유저의 지불 수단이 되는 `Social Innovator Token` Contract
@@ -171,7 +176,7 @@ function checkUserRewardCount() internal {
 }
 ```
    
-첫 번째로 `checkResetRewardCount();`는 User가 받은 보상 횟수의 초기화를 검토한다. UTC+09 기준으로 00시 마다 보상 횟수를 초기화시켜야 했기 때문에 timestamp를 날짜로 변환시켜야 했다. 이를 위해 우리는 DateTime Contract를 사용하였다.    
+첫 번째로 `checkResetRewardCount();`는 User가 받은 보상 횟수의 초기화를 검토한다. UTC+09 기준으로 00시 마다 보상 횟수를 초기화시켜야 했기 때문에 timestamp를 날짜로 변환시켜야 했다. 이를 위해 우리는 DataTime Contract를 사용하였다.    
 - Check out detailed information about DateTime at [github](https://github.com/pipermerriam/ethereum-datetime)
    
 또한, 효율적인 Gas사용을 위하여 User가 마지막으로 기록한 시간 `UserData.lastTimeStamp`를 Day를 변환하고, 현재 TimeStamp를 Day로 변환하여 비교하였다. Day 같다면 Month를 비교하였다. year의 경우 발생할 확률에 비하여 조건검사로 소모되는 Gas비용이 크다고 판단하여 비교하지 않았다.   
@@ -266,7 +271,13 @@ Level Up function과 NickName 변환 권한을 구매하는 function은 같은 �
    
 ### 4-2. 어뷰징 방지
    
-회원 가입, 글 등록등 모든 Transaction은 User의 Private Key로 서명 한다. 즉, 누구나 Contract에 접근하여 회원 가입을 진행 하고, 글을 작성하여 일일 보상을 가지고 갈 수 있음을 의미한다. 글을 등록할 때 들어가는 Transaction Fee 보다 작성으로 얻을 수 있는 토큰의 가치가 크다면 User들은 어뷰징을 할 것이다. 이를 해결하기 위해서 가장 쉬운 방법은 User가 서명하여 수수료를 대신 납부하는 것이 아닌, 관리자가 직접 Transaction을 발생시키는 것이다. 하지만, 이것은 어뷰징을 방지하는 대신 `탈중앙화`를 잃는 것을 뜻할 수도 있다. 서비스에서 이 문제를 해결하기 보다는, Contract 내에서 이런 어뷰징을 방지할 수 있는 방법을 찾아보는 것이 더 효율적일 수 있다.
+회원 가입, 글 등록등 모든 Transaction은 User의 Private Key로 서명 한다. 이 말은 User가 서비스를 통하여 접근 하는 방법 이외 직접 Contract의 함수들을 호출 할 수 있음을 의미한다. 하지만 서비스에서 발생되는 모든 Transaction은 Fee Delegated로 작동 하기 때문에 유저에게 Transaction Fee 부담이 없는 반면 Contract에 직접 접근하는 것은 Transaction Fee를 User가 직접 지불해야하기 때문에 User 입장에서도 큰 이익이 없는 행동이다. 하지만 글을 등록할 때 들어가는 Transaction Fee 보다 작성으로 얻을 수 있는 토큰의 가치가 크다면 User들 Transaction Fee에 관계 없이 어뷰징을 할 것이다. 이를 가장 쉽게 해결하는 방법은 Transaction을 User의 Private Key가 아닌 관리자의 Private Key로 서명하는 것이다. 하지만 이것은 어뷰징을 쉽게 방지할 수 있지만 Klaytn의 Fee Delegated를 활용하지 못하는 것이고, '탈중앙화'를 잃는 의미가 될 수 있다.   
+   
+* [첫 번째 방법] 위에서 언급한 것처럼 Transaction에 대한 서명을 관리자가 한다.
+    - 관리자 권한 함수로 변경 되면 Contract에서 일반 유저 접근은 불가능해진다.
+    - 기존 Public Blockchain에서도 가능한 간단한 방법이기 때문에 Klaytn Blockchain을 사용하는 장점을 잃을 것이다.
+* [두 번째 방법] 글 작성과 보상 기능을 분리하고 해당 글에 대한 유효성 검증 로직을 추가한다.
+    - 현재는 글 작성과 동시에 보상이 즉시 지불 된다. 작성한 글이 보상을 받을만한 가치가 있는 글인지 확인해볼 필요가 있다.
    
    
 ### 4-3. 글 등록 방식 개선
@@ -288,4 +299,5 @@ Klaytn Network가 Ethereum과 같은 Public Blockchain 보다 Gas 비용이 저�
    
 이번 프로젝트에서 가장 아쉬움이 남는 부분은 Contract에서 Storage를 분리해내지 못한 점이다. 해당 프로젝트를 업데이트 하거나 방식을 조금 변경하게 된다면 파일럿 프로젝트를 서비스하는 기간에 기록 된 User Data, Inconvenience Data를 사용하지 못하게 될 것이다. 이것은 SmartContract의 단점이고, 분리된다고 해도 Data가 추가 되는 것은 불가능 할 수 있지만 Storage와 Logic을 분리한다면 어느 정도의 변경에는 대비할 수 있었을 것이다.
    
+    
    
