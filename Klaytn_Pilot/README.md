@@ -1,13 +1,7 @@
 
 # 1. Introduction
 
-> Introduction of this project
-
-> Main features
-> 1-1. [Contract] Uploading posts
-> 1-2. [Contract] User rewards
-> 1-3. [Contract] NFT
-   
+This project is an implementation of a scheme on the Klaytn platform, which records data and offers rewards in 'Inconvenience' app operated by Nitpick ([https://www.nitpick.co.kr/](https://www.nitpick.co.kr/)), and users upload inconveniences they experience in their daily life on the app and get rewards(Social Innovator Token and Point). Social Innovator Token is a means of increasing the user's level and purchasing ticket for changing users' nickname, and Point is for buying various items and `gift cards` from a store. As the increase of user’s level, an accrual rate of Point is improved and options for products that can be purchased as Point in the store are expanded. In the future, it is possible to track where and how users' inconvenient experiences which are recorded in the blockchain are used, and develop in a way that provides multiple rewards to users.
    
 # 2. Systems Architecture
 
